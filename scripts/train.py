@@ -3,16 +3,8 @@ from __future__ import annotations
 import argparse
 import json
 import pickle
-from pathlib import Path
-
 import sys
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
-
-from src.config import load_config
-from src.pipeline import run_pipeline
+from pathlib import Path
 
 
 def parse_args() -> argparse.Namespace:
@@ -22,6 +14,13 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
+    project_root = Path(__file__).resolve().parents[1]
+    if str(project_root) not in sys.path:
+        sys.path.insert(0, str(project_root))
+
+    from src.config import load_config
+    from src.pipeline import run_pipeline
+
     args = parse_args()
     config = load_config(args.config)
 

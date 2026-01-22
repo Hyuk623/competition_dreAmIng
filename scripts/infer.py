@@ -2,19 +2,10 @@ from __future__ import annotations
 
 import argparse
 import pickle
+import sys
 from pathlib import Path
 
-import sys
-
 import pandas as pd
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
-
-from src.config import load_config
-from src.io import save_csv
-from src.pipeline import load_data, predict, preprocess
 
 
 def parse_args() -> argparse.Namespace:
@@ -32,6 +23,14 @@ def resolve_output_path(out_arg: str) -> Path:
 
 
 def main() -> None:
+    project_root = Path(__file__).resolve().parents[1]
+    if str(project_root) not in sys.path:
+        sys.path.insert(0, str(project_root))
+
+    from src.config import load_config
+    from src.io import save_csv
+    from src.pipeline import load_data, predict, preprocess
+
     args = parse_args()
     config = load_config(args.config)
     output_path = resolve_output_path(args.out)
