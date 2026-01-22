@@ -1,0 +1,39 @@
+name: codex_review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  codex:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Codex review
+        if: ${{ secrets.OPENAI_API_KEY != '' }}
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          prompt-file: .github/codex/prompts/review.md
+          safety-strategy: drop-sudo
+          sandbox: workspace-write
+      - name: Skip Codex (missing secret)
+        if: ${{ secrets.OPENAI_API_KEY == '' }}
+        run: echo "OPENAI_API_KEY is not set; skipping Codex review."
+      - name: Gate on verdict
+        if: ${{ secrets.OPENAI_API_KEY != '' }}
+        run: |
+          if [ -f codex_verdict.txt ]; then
+            first_line=$(head -n 1 codex_verdict.txt)
+            echo "Codex verdict: $first_line"
+            if [ "$first_line" = "VERDICT: FAIL" ]; then
+              exit 1
+            fi
+          else
+            echo "Codex verdict file not found."
+          fi
