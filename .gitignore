@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+
+# Artifacts / data
+/data/
+/models/
+/outputs/
+/runs/
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.pkl
+*.joblib
+submission.csv
+
+# Notebook checkpoints
+.ipynb_checkpoints/

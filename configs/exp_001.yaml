@@ -1,0 +1,9 @@
+seed: 42
+input_dir: data
+output_dir: outputs/exp_001
+train_file: train.csv
+test_file: test.csv
+id_col: id
+target_col: target
+model: logistic_regression
+notes: "baseline logistic regression"
